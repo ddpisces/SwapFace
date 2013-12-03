@@ -6,15 +6,24 @@
 //  Copyright (c) 2013 zzyunying. All rights reserved.
 //
 
+#import <AssetsLibrary/AssetsLibrary.h>
 #import "ViewController.h"
 #import "SlideImageView.h"
 
+static int count=0;
+
 @interface ViewController ()
+
+-(void)allPhotosCollected:(NSArray*)imgArray;
 
 @end
 
 @implementation ViewController{
     SlideImageView *imageSelectionView;
+    
+    ALAssetsLibrary *library;
+    NSArray *imageArray;
+    NSMutableArray *mutableArray;
 }
 
 - (void)viewDidLoad
@@ -26,7 +35,7 @@
     
     CGRect rect = {{20.0,100.0},{250.0,350.0}};
     imageSelectionView = [[SlideImageView alloc]initWithFrame:rect ZMarginValue:5 XMarginValue:10 AngleValue:0.3 Alpha:1000];
-    imageSelectionView.borderColor = [UIColor grayColor];
+//    imageSelectionView.borderColor = [UIColor grayColor];
     //    imageSelectionView.delegate = self;
 
     UIImage* image = [UIImage imageNamed:@"girl"];
@@ -37,12 +46,68 @@
     [imageSelectionView setImageShadowsWtihDirectionX:5 Y:5 Alpha:0.7];
     [imageSelectionView reLoadUIview];
     [self.view addSubview:imageSelectionView];
+    
+    [self getAllPictures];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)getAllPictures
+{
+    imageArray=[[NSArray alloc] init];
+    mutableArray =[[NSMutableArray alloc]init];
+    NSMutableArray* assetURLDictionaries = [[NSMutableArray alloc] init];
+    
+    library = [[ALAssetsLibrary alloc] init];
+    
+    void (^assetEnumerator)( ALAsset *, NSUInteger, BOOL *) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+        if(result != nil) {
+            if([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto]) {
+                [assetURLDictionaries addObject:[result valueForProperty:ALAssetPropertyURLs]];
+                
+                NSURL *url= (NSURL*) [[result defaultRepresentation]url];
+                
+                [library assetForURL:url
+                         resultBlock:^(ALAsset *asset) {
+                             [mutableArray addObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]]];
+                             
+                             if ([mutableArray count]==count)
+                             {
+                                 imageArray=[[NSArray alloc] initWithArray:mutableArray];
+                                 [self allPhotosCollected:imageArray];
+                             }
+                         }
+                        failureBlock:^(NSError *error){ NSLog(@"operation was not successfull!"); } ];
+                
+            }
+        }
+    };
+    
+    NSMutableArray *assetGroups = [[NSMutableArray alloc] init];
+    
+    void (^ assetGroupEnumerator) ( ALAssetsGroup *, BOOL *)= ^(ALAssetsGroup *group, BOOL *stop) {
+        if(group != nil) {
+            [group enumerateAssetsUsingBlock:assetEnumerator];
+            [assetGroups addObject:group];
+            count=[group numberOfAssets];
+        }
+    };
+    
+    assetGroups = [[NSMutableArray alloc] init];
+    
+    [library enumerateGroupsWithTypes:ALAssetsGroupAll
+                           usingBlock:assetGroupEnumerator
+                         failureBlock:^(NSError *error) {NSLog(@"There is an error");}];
+}
+
+
+-(void)allPhotosCollected:(NSArray*)imgArray
+{
+    int i = [imgArray count];
 }
 
 @end
