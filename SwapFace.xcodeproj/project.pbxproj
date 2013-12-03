@@ -460,6 +460,7 @@
 				F504A969184C8E9F00B8E90D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F504A96A184C8E9F00B8E90D /* Build configuration list for PBXNativeTarget "SwapFaceTests" */ = {
 			isa = XCConfigurationList;
@@ -468,6 +469,7 @@
 				F504A96C184C8E9F00B8E90D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
