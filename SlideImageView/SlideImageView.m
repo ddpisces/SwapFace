@@ -169,8 +169,9 @@
 
 - (void) addImage:(UIImage *)image //添加图片数据
 {
-    UIImage* resizeImage = [self ImageWithSize:image toSize:self.frame.size];//调整图片尺寸
-    [_imageArray addObject:resizeImage];
+//    UIImage* resizeImage = [self ImageWithSize:image toSize:self.frame.size];//调整图片尺寸
+//    [_imageArray addObject:resizeImage];
+    [_imageArray addObject:image];
 }
 
 - (void)reLoadUIview   //重新加载UI
