@@ -10,11 +10,9 @@
 #import "ViewController.h"
 #import "SlideImageView.h"
 
-static int count=0;
-
 @interface ViewController ()
 
--(void)allPhotosCollected:(NSArray*)imgArray;
+-(void)allPhotosCollected;
 
 @end
 
@@ -22,8 +20,9 @@ static int count=0;
     SlideImageView *imageSelectionView;
     
     ALAssetsLibrary *library;
-    NSArray *imageArray;
-    NSMutableArray *mutableArray;
+    NSMutableArray *imageUrlArray;
+    
+    NSInteger imageCount;
 }
 
 - (void)viewDidLoad
@@ -58,8 +57,7 @@ static int count=0;
 
 -(void)getAllPictures
 {
-    imageArray=[[NSArray alloc] init];
-    mutableArray =[[NSMutableArray alloc]init];
+    imageUrlArray = [[NSMutableArray alloc]init];
     NSMutableArray* assetURLDictionaries = [[NSMutableArray alloc] init];
     
     library = [[ALAssetsLibrary alloc] init];
@@ -69,19 +67,12 @@ static int count=0;
             if([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto]) {
                 [assetURLDictionaries addObject:[result valueForProperty:ALAssetPropertyURLs]];
                 
-                NSURL *url= (NSURL*) [[result defaultRepresentation]url];
+                [imageUrlArray addObject:[[result defaultRepresentation]url]];
                 
-                [library assetForURL:url
-                         resultBlock:^(ALAsset *asset) {
-                             [mutableArray addObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]]];
-                             
-                             if ([mutableArray count]==count)
-                             {
-                                 imageArray=[[NSArray alloc] initWithArray:mutableArray];
-                                 [self allPhotosCollected:imageArray];
-                             }
-                         }
-                        failureBlock:^(NSError *error){ NSLog(@"operation was not successfull!"); } ];
+                if ([imageUrlArray count] == imageCount)
+                {
+                    [self allPhotosCollected];
+                }
                 
             }
         }
@@ -91,9 +82,9 @@ static int count=0;
     
     void (^ assetGroupEnumerator) ( ALAssetsGroup *, BOOL *)= ^(ALAssetsGroup *group, BOOL *stop) {
         if(group != nil) {
+            imageCount = [group numberOfAssets];
             [group enumerateAssetsUsingBlock:assetEnumerator];
             [assetGroups addObject:group];
-            count=[group numberOfAssets];
         }
     };
     
@@ -105,9 +96,21 @@ static int count=0;
 }
 
 
--(void)allPhotosCollected:(NSArray*)imgArray
+-(void)allPhotosCollected
 {
-    int i = [imgArray count];
+    [imageUrlArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        NSURL *url= (NSURL*)obj;
+        
+        [library assetForURL:url
+                 resultBlock:^(ALAsset *asset) {
+                     UIImage *tempImgage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+                     [imageSelectionView addImage:tempImgage];
+                     [imageSelectionView reLoadUIview];
+                 }
+                failureBlock:^(NSError *error){ NSLog(@"operation was not successfull!"); } ];
+    }];
+    
 }
 
 @end
