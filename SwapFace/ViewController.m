@@ -82,6 +82,7 @@
     
     void (^ assetGroupEnumerator) ( ALAssetsGroup *, BOOL *)= ^(ALAssetsGroup *group, BOOL *stop) {
         if(group != nil) {
+            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
             imageCount = [group numberOfAssets];
             [group enumerateAssetsUsingBlock:assetEnumerator];
             [assetGroups addObject:group];
