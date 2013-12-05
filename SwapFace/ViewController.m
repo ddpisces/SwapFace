@@ -69,6 +69,7 @@
                 
                 [imageUrlArray addObject:[[result defaultRepresentation]url]];
                 
+                NSLog(@"Total:%d, now:%d", [imageUrlArray count], imageCount);
                 if ([imageUrlArray count] == imageCount)
                 {
                     [self allPhotosCollected];
@@ -96,12 +97,20 @@
                          failureBlock:^(NSError *error) {NSLog(@"There is an error");}];
 }
 
+// load at most 5 images when App start up, the App will crash if load too much images once.
+int i = 0;
 
 -(void)allPhotosCollected
 {
     [imageUrlArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
+    
         NSURL *url= (NSURL*)obj;
+
+        if (i > 4) {
+            *stop = YES;
+        } else {
+            i++;
+        }
         
         [library assetForURL:url
                  resultBlock:^(ALAsset *asset) {
