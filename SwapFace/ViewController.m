@@ -20,15 +20,21 @@
     SlideImageView *imageSelectionView;
     
     ALAssetsLibrary *library;
-    NSMutableArray *imageUrlArray;
+    NSMutableArray *imageAsset;
     
     NSInteger imageCount;
+    
+    ALAssetsGroup *assetsGroup;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    if (!imageAsset) {
+        imageAsset = [[NSMutableArray alloc]init];
+    }
     
     self.view.layer.contents = (id)[UIImage imageNamed:@"background"].CGImage;
     
@@ -57,25 +63,19 @@
 
 -(void)getAllPictures
 {
-    imageUrlArray = [[NSMutableArray alloc]init];
     NSMutableArray* assetURLDictionaries = [[NSMutableArray alloc] init];
     
     library = [[ALAssetsLibrary alloc] init];
-    
+
     void (^assetEnumerator)( ALAsset *, NSUInteger, BOOL *) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
-        if(result != nil) {
+        if(result) {
             if([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto]) {
                 [assetURLDictionaries addObject:[result valueForProperty:ALAssetPropertyURLs]];
                 
-                [imageUrlArray addObject:[[result defaultRepresentation]url]];
-                
-                NSLog(@"Total:%d, now:%d", [imageUrlArray count], imageCount);
-                if ([imageUrlArray count] == imageCount)
-                {
-                    [self allPhotosCollected];
-                }
-                
+                [imageAsset addObject:result];
             }
+        } else {
+            [self allPhotosCollected];
         }
     };
     
@@ -102,23 +102,24 @@ int i = 0;
 
 -(void)allPhotosCollected
 {
-    [imageUrlArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [imageAsset enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
     
-        NSURL *url= (NSURL*)obj;
-
         if (i > 4) {
+            [imageSelectionView reLoadUIview];
             *stop = YES;
         } else {
             i++;
         }
         
-        [library assetForURL:url
-                 resultBlock:^(ALAsset *asset) {
-                     UIImage *tempImgage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
-                     [imageSelectionView addImage:tempImgage];
-                     [imageSelectionView reLoadUIview];
-                 }
-                failureBlock:^(NSError *error){ NSLog(@"operation was not successfull!"); } ];
+        // load the asset for this cell
+        if (obj) {
+            ALAsset *asset = imageAsset[idx];
+            UIImage *thumbnail = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+            [imageSelectionView addImage:thumbnail];
+        } else {
+            [imageSelectionView reLoadUIview];
+        }
+        
     }];
     
 }
