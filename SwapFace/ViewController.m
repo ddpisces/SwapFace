@@ -41,7 +41,7 @@
     CGRect rect = {{20.0,100.0},{250.0,350.0}};
     imageSelectionView = [[SlideImageView alloc]initWithFrame:rect ZMarginValue:5 XMarginValue:10 AngleValue:0.3 Alpha:1000];
 //    imageSelectionView.borderColor = [UIColor grayColor];
-    //    imageSelectionView.delegate = self;
+    imageSelectionView.delegate = self;
 
     UIImage* image = [UIImage imageNamed:@"girl"];
     UIImage* image2 = [UIImage imageNamed:@"landscape"];
@@ -118,6 +118,17 @@
         
     }];
     
+}
+
+#pragma mark - SlideImageView Delegate
+
+- (void)SlideImageViewDidScrollWithIndex:(int)index
+{
+}
+
+- (void)SlideImageViewDidEndScorllWithIndex:(int)index
+{
+    NSLog(@"which image:%d", index);
 }
 
 @end

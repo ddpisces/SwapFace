@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SlideImageView.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <SlideImageViewDelegate>
 
 @end
