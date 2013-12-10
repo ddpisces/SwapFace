@@ -12,7 +12,7 @@
 
 @interface ViewController ()
 
--(void)allPhotosCollected;
+-(void)initPhotosCollected;
 
 @end
 
@@ -75,7 +75,8 @@
                 [imageAsset addObject:result];
             }
         } else {
-            [self allPhotosCollected];
+            NSLog(@"Image Number:%d", [imageAsset count]);
+            [self initPhotosCollected];
         }
     };
     
@@ -97,27 +98,22 @@
                          failureBlock:^(NSError *error) {NSLog(@"There is an error");}];
 }
 
-// load at most 5 images when App start up, the App will crash if load too much images once.
-int i = 0;
 
--(void)allPhotosCollected
+-(void)initPhotosCollected
 {
     [imageAsset enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-    
-        if (i > 4) {
-            [imageSelectionView reLoadUIview];
-            *stop = YES;
-        } else {
-            i++;
-        }
-        
+
         // load the asset for this cell
         if (obj) {
             ALAsset *asset = imageAsset[idx];
             UIImage *thumbnail = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
             [imageSelectionView addImage:thumbnail];
-        } else {
+        }
+        
+        // loat at most 4 images when start up
+        if ((idx >= [imageAsset count] - 1) || (idx > 4)) {
             [imageSelectionView reLoadUIview];
+            *stop = YES;
         }
         
     }];
