@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B83E7876184E0F1700C91CFA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B83E7875184E0F1700C91CFA /* QuartzCore.framework */; };
 		F502F6EF184DDCFE00F5783B /* SlideImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F502F6EE184DDCFE00F5783B /* SlideImageView.m */; };
+		F502F6F618580D5D00F5783B /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = F502F6F518580D5D00F5783B /* iCarousel.m */; };
 		F504A939184C8E9F00B8E90D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F504A938184C8E9F00B8E90D /* Foundation.framework */; };
 		F504A93B184C8E9F00B8E90D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F504A93A184C8E9F00B8E90D /* CoreGraphics.framework */; };
 		F504A93D184C8E9F00B8E90D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F504A93C184C8E9F00B8E90D /* UIKit.framework */; };
@@ -39,6 +40,8 @@
 		B83E7875184E0F1700C91CFA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F502F6ED184DDCFE00F5783B /* SlideImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideImageView.h; sourceTree = "<group>"; };
 		F502F6EE184DDCFE00F5783B /* SlideImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideImageView.m; sourceTree = "<group>"; };
+		F502F6F418580D5D00F5783B /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		F502F6F518580D5D00F5783B /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		F504A935184C8E9F00B8E90D /* SwapFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwapFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F504A938184C8E9F00B8E90D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F504A93A184C8E9F00B8E90D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -94,9 +97,19 @@
 			path = SlideImageView;
 			sourceTree = "<group>";
 		};
+		F502F6F318580D5D00F5783B /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				F502F6F418580D5D00F5783B /* iCarousel.h */,
+				F502F6F518580D5D00F5783B /* iCarousel.m */,
+			);
+			path = iCarousel;
+			sourceTree = "<group>";
+		};
 		F504A92C184C8E9F00B8E90D = {
 			isa = PBXGroup;
 			children = (
+				F502F6F318580D5D00F5783B /* iCarousel */,
 				F502F6EC184DDCFE00F5783B /* SlideImageView */,
 				F504A93E184C8E9F00B8E90D /* SwapFace */,
 				F504A95D184C8E9F00B8E90D /* SwapFaceTests */,
@@ -267,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F504A94F184C8E9F00B8E90D /* ViewController.m in Sources */,
+				F502F6F618580D5D00F5783B /* iCarousel.m in Sources */,
 				F504A949184C8E9F00B8E90D /* AppDelegate.m in Sources */,
 				F502F6EF184DDCFE00F5783B /* SlideImageView.m in Sources */,
 				F504A945184C8E9F00B8E90D /* main.m in Sources */,
