@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SlideImageView.h"
 #import "iCarousel.h"
 
-@interface ViewController : UIViewController <SlideImageViewDelegate>
+@interface ViewController : UIViewController <iCarouselDataSource, iCarouselDelegate>
 
 @property (weak, nonatomic) IBOutlet iCarousel *carousel;
 

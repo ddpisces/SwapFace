@@ -8,16 +8,12 @@
 
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ViewController.h"
-#import "SlideImageView.h"
 
 @interface ViewController ()
-
--(void)initPhotosCollected;
 
 @end
 
 @implementation ViewController{
-    SlideImageView *imageSelectionView;
     
     ALAssetsLibrary *library;
     NSMutableArray *imageAsset;
@@ -36,27 +32,11 @@
         imageAsset = [[NSMutableArray alloc]init];
     }
     
-    self.view.layer.contents = (id)[UIImage imageNamed:@"background"].CGImage;
-    
-    CGRect rect = {{20.0,100.0},{250.0,350.0}};
-    imageSelectionView = [[SlideImageView alloc]initWithFrame:rect ZMarginValue:5 XMarginValue:10 AngleValue:0.3 Alpha:1000];
-//    imageSelectionView.borderColor = [UIColor grayColor];
-//    imageSelectionView.delegate = self;
-//
-//    UIImage* image = [UIImage imageNamed:@"girl"];
-//    UIImage* image2 = [UIImage imageNamed:@"landscape"];
-//    [imageSelectionView addImage:image];
-//    
-//    [imageSelectionView addImage:image2];
-//    [imageSelectionView setImageShadowsWtihDirectionX:5 Y:5 Alpha:0.7];
-//    [imageSelectionView reLoadUIview];
-//    [self.view addSubview:imageSelectionView];
-    
-//    [self getAllPictures];
+    self.carousel.layer.contents = (id)[UIImage imageNamed:@"background"].CGImage;
     
     self.carousel.type = iCarouselTypeCoverFlow2;
     
-    
+    [self getAllPictures];
 }
 
 - (void)didReceiveMemoryWarning
@@ -80,7 +60,7 @@
             }
         } else {
             NSLog(@"Image Number:%d", [imageAsset count]);
-            [self initPhotosCollected];
+            [self.carousel reloadData];
         }
     };
     
@@ -103,42 +83,10 @@
 }
 
 
--(void)initPhotosCollected
-{
-    [imageAsset enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-
-        // load the asset for this cell
-        if (obj) {
-            ALAsset *asset = imageAsset[idx];
-            UIImage *thumbnail = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
-            [imageSelectionView addImage:thumbnail];
-        }
-        
-        // loat at most 4 images when start up
-        if ((idx >= [imageAsset count] - 1) || (idx > 4)) {
-            [imageSelectionView reLoadUIview];
-            *stop = YES;
-        }
-        
-    }];
-    
-}
-
-#pragma mark - SlideImageView Delegate
-
-- (void)SlideImageViewDidScrollWithIndex:(int)index
-{
-}
-
-- (void)SlideImageViewDidEndScorllWithIndex:(int)index
-{
-    NSLog(@"which image:%d", index);
-}
-
 #pragma mark - iCarousel Data Source
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return 20;
+    return [imageAsset count];
 }
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
