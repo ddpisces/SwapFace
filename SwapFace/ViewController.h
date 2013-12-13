@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideImageView.h"
+#import "iCarousel.h"
 
 @interface ViewController : UIViewController <SlideImageViewDelegate>
+
+@property (weak, nonatomic) IBOutlet iCarousel *carousel;
 
 @end

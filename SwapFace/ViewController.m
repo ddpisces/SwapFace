@@ -41,18 +41,22 @@
     CGRect rect = {{20.0,100.0},{250.0,350.0}};
     imageSelectionView = [[SlideImageView alloc]initWithFrame:rect ZMarginValue:5 XMarginValue:10 AngleValue:0.3 Alpha:1000];
 //    imageSelectionView.borderColor = [UIColor grayColor];
-    imageSelectionView.delegate = self;
-
-    UIImage* image = [UIImage imageNamed:@"girl"];
-    UIImage* image2 = [UIImage imageNamed:@"landscape"];
-    [imageSelectionView addImage:image];
+//    imageSelectionView.delegate = self;
+//
+//    UIImage* image = [UIImage imageNamed:@"girl"];
+//    UIImage* image2 = [UIImage imageNamed:@"landscape"];
+//    [imageSelectionView addImage:image];
+//    
+//    [imageSelectionView addImage:image2];
+//    [imageSelectionView setImageShadowsWtihDirectionX:5 Y:5 Alpha:0.7];
+//    [imageSelectionView reLoadUIview];
+//    [self.view addSubview:imageSelectionView];
     
-    [imageSelectionView addImage:image2];
-    [imageSelectionView setImageShadowsWtihDirectionX:5 Y:5 Alpha:0.7];
-    [imageSelectionView reLoadUIview];
-    [self.view addSubview:imageSelectionView];
+//    [self getAllPictures];
     
-    [self getAllPictures];
+    self.carousel.type = iCarouselTypeCoverFlow2;
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,5 +134,29 @@
 {
     NSLog(@"which image:%d", index);
 }
+
+#pragma mark - iCarousel Data Source
+- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+{
+    return 20;
+}
+
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
+{
+    float height, width;
+    
+    if (view == nil) {
+        view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"girl" ]];
+        NSLog(@"image x:%f, y:%f", view.frame.size.height, view.frame.size.width);
+
+        height = 300.0;
+        width  = height * view.frame.size.width / view.frame.size.height;
+        view.frame = CGRectMake(0, 0, width, height);
+        
+    }
+    
+    return view;
+}
+
 
 @end
