@@ -9,6 +9,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ViewController.h"
 
+#define FITHEITHT   300
+#define FITWIDTH    200
+
 @interface ViewController ()
 
 @end
@@ -91,20 +94,50 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    float height, width;
-    
     if (view == nil) {
-        view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"girl" ]];
+        ALAsset *photoAsset = imageAsset[index];
+        ALAssetRepresentation *assetRepresentation = [photoAsset defaultRepresentation];
+        UIImage *fullScreenImage = [UIImage imageWithCGImage:[assetRepresentation fullScreenImage]
+                                                       scale:[assetRepresentation scale]
+                                                 orientation:UIImageOrientationUp];
+        
+        view = [[UIImageView alloc] initWithImage:fullScreenImage];
         NSLog(@"image x:%f, y:%f", view.frame.size.height, view.frame.size.width);
 
-        height = 300.0;
-        width  = height * view.frame.size.width / view.frame.size.height;
-        view.frame = CGRectMake(0, 0, width, height);
-        
+        view.frame = [self adjustImageSize:view.frame.size];
+        NSLog(@"image x:%f, y:%f", view.frame.size.height, view.frame.size.width);
     }
     
     return view;
 }
 
+- (CGRect)adjustImageSize:(CGSize)size
+{
+    float height, width;
+    CGRect rect = CGRectMake(0.0, 0.0, 0.0, 0.0);
+    
+    height = size.height;
+    width  = size.width;
+    
+    if (width/height >= FITWIDTH/FITHEITHT) {
+        if (width > FITWIDTH) {
+            rect.size.width  = FITWIDTH;
+            rect.size.height = (height * FITWIDTH)/width;
+        } else {
+            rect.size.width  = width;
+            rect.size.height = height;
+        }
+    } else {
+        if (height >= FITHEITHT) {
+            rect.size.height = FITHEITHT;
+            rect.size.width  = (width * FITHEITHT)/height;
+        } else {
+            rect.size.height = height;
+            rect.size.width  = width;
+        }
+    }
+    
+    return rect;
+}
 
 @end
