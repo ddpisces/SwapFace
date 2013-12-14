@@ -35,6 +35,8 @@
         imageAsset = [[NSMutableArray alloc]init];
     }
     
+    self.homeTitle.title = @"Select Photo";
+    
     self.carousel.layer.contents = (id)[UIImage imageNamed:@"background"].CGImage;
     
     self.carousel.type = iCarouselTypeCoverFlow2;

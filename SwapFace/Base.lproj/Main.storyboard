@@ -39,6 +39,7 @@
                     </view>
                     <connections>
                         <outlet property="carousel" destination="9u6-Xi-uWG" id="4Ur-aP-I2E"/>
+                        <outlet property="homeTitle" destination="GaP-if-OYW" id="cRe-7S-Am3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

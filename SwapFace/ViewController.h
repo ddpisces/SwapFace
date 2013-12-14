@@ -12,5 +12,6 @@
 @interface ViewController : UIViewController <iCarouselDataSource, iCarouselDelegate>
 
 @property (weak, nonatomic) IBOutlet iCarousel *carousel;
+@property (weak, nonatomic) IBOutlet UINavigationItem *homeTitle;
 
 @end
